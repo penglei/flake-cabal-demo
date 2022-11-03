@@ -11,9 +11,22 @@
 
         hPkgs = pkgs.haskell.packages."ghc924";
 
+        hls =
+          if system == "aarch64-darwin" then
+            let #https://github.com/NixOS/nixpkgs/issues/194367
+              hslWithoutPlugins = hPkgs.haskell-language-server.override  {
+                hls-fourmolu-plugin = null;
+                hls-ormolu-plugin = null;
+              };
+              disableCabalFlag = pkgs.haskell.lib.disableCabalFlag;
+              hls = disableCabalFlag (disableCabalFlag hslWithoutPlugins "fourmolu") "ormolu";
+            in hls
+          else hPkgs.haskell-language-server;
+
         ghc = hPkgs.ghcWithPackages (ps: with ps; [ dhall dhall-json ]);
         hsDevTools = [
           ghc
+          hls
           hPkgs.cabal-install
         ];
       in {
