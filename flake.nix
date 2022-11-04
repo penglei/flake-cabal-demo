@@ -39,10 +39,6 @@
           # pkgs.haskell.lib.buildStackProject does
           # https://github.com/NixOS/nixpkgs/blob/d64780ea0e22b5f61cd6012a456869c702a72f20/pkgs/development/haskell-modules/generic-stack-builder.nix#L38
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [];
-
-          # Configure the Nix path to our own `pkgs`, to ensure Stack-with-Nix uses the correct one rather than the global <nixpkgs> when looking for the right `ghc` argument to pass in `nix/stack-integration.nix`
-          # See https://nixos.org/nixos/nix-pills/nix-search-paths.html for more information
-          NIX_PATH = "nixpkgs=" + pkgs.path;
         };
       });
 }
